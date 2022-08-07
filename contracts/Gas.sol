@@ -29,7 +29,7 @@ contract GasContract is Ownable, Constants {
     }
     PaymentType constant defaultPayment = PaymentType.Unknown;
 
-    History[] public paymentHistory; // when a payment was updated
+    // History[] public paymentHistory; // when a payment was updated
 
     struct Payment {
         PaymentType paymentType;
@@ -41,11 +41,12 @@ contract GasContract is Ownable, Constants {
         uint256 amount;
     }
 
-    struct History {
-        uint256 lastUpdate;
-        address updatedBy;
-        uint256 blockNumber;
-    }
+    // struct History {
+    //     uint256 lastUpdate;
+    //     address updatedBy;
+    //     uint256 blockNumber;
+    // }
+
     uint256 wasLastOdd = 1;
     mapping(address => uint256) public isOddWhitelistUser;
     struct ImportantStruct {
@@ -124,13 +125,13 @@ contract GasContract is Ownable, Constants {
         }
     }
 
-    function getPaymentHistory()
-        public
-        payable
-        returns (History[] memory paymentHistory_)
-    {
-        return paymentHistory;
-    }
+    // function getPaymentHistory()
+    //     public
+    //     payable
+    //     returns (History[] memory paymentHistory_)
+    // {
+    //     return paymentHistory;
+    // }
 
     function checkForAdmin(address _user) public view returns (bool admin_) {
         bool admin = false;
@@ -157,21 +158,21 @@ contract GasContract is Ownable, Constants {
         return mode;
     }
 
-    function addHistory(address _updateAddress, bool _tradeMode)
-        public
-        returns (bool status_, bool tradeMode_)
-    {
-        History memory history;
-        history.blockNumber = block.number;
-        history.lastUpdate = block.timestamp;
-        history.updatedBy = _updateAddress;
-        paymentHistory.push(history);
-        bool[] memory status = new bool[](tradePercent);
-        for (uint256 i = 0; i < tradePercent; i++) {
-            status[i] = true;
-        }
-        return ((status[0] == true), _tradeMode);
-    }
+    // function addHistory(address _updateAddress, bool _tradeMode)
+    //     public
+    //     returns (bool status_, bool tradeMode_)
+    // {
+    //     History memory history;
+    //     history.blockNumber = block.number;
+    //     history.lastUpdate = block.timestamp;
+    //     history.updatedBy = _updateAddress;
+    //     paymentHistory.push(history);
+    //     bool[] memory status = new bool[](tradePercent);
+    //     for (uint256 i = 0; i < tradePercent; i++) {
+    //         status[i] = true;
+    //     }
+    //     return ((status[0] == true), _tradeMode);
+    // }
 
     function getPayments(address _user)
         public
@@ -245,8 +246,8 @@ contract GasContract is Ownable, Constants {
                 payments[_user][ii].admin = _user;
                 payments[_user][ii].paymentType = _type;
                 payments[_user][ii].amount = _amount;
-                bool tradingMode = getTradingMode();
-                addHistory(_user, tradingMode);
+                getTradingMode();
+                //addHistory(_user, tradingMode);
                 emit PaymentUpdated(
                     senderOfTx,
                     _ID,
@@ -329,3 +330,4 @@ contract GasContract is Ownable, Constants {
 //Coverage gas optimization -- progress 
 //  4325626
 //  4189310 
+//  3772656 
