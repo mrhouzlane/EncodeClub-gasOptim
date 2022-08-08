@@ -109,13 +109,14 @@ contract GasContract is Ownable {
                 administrators[ii] = _admins[ii];
                 if (_admins[ii] == contractOwner) {
                     balances[contractOwner] = _totalSupply; //track balance of 
-                } else {
-                    balances[_admins[ii]] = 0;
-                }
-                if (_admins[ii] == contractOwner) {
-                    emit supplyChanged(_admins[ii], _totalSupply);
-                } else if (_admins[ii] != contractOwner) {
-                    emit supplyChanged(_admins[ii], 0);
+            //     } else {
+            //         balances[_admins[ii]] = 0;
+            //     }
+            //     if (_admins[ii] == contractOwner) {
+            //         emit supplyChanged(_admins[ii], _totalSupply);
+            //     } else if (_admins[ii] != contractOwner) {
+            //         emit supplyChanged(_admins[ii], 0);
+            //    }
                 }
             }
         }
@@ -129,7 +130,7 @@ contract GasContract is Ownable {
     //     return paymentHistory;
     // }
 
-    function checkForAdmin(address _user) public view returns (bool admin_) {
+    function checkForAdmin(address _user) public view returns (bool) {
         for (uint256 ii = 0; ii < administrators.length; ii++) {
             if (administrators[ii] == _user) {
                 return true;
@@ -218,10 +219,10 @@ contract GasContract is Ownable {
             _ID > 0,
             "ID must be greater than 0"
         );
-        require(
-            _amount > 0,
-            "Amount must be greater than 0"
-        );
+        // require(
+        //     _amount > 0,
+        //     "Amount must be greater than 0"
+        // );
         // require(
         //     _user != address(0),
         //     "Address"
