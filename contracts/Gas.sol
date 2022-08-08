@@ -59,15 +59,12 @@ contract GasContract is Ownable {
     event AddedToWhitelist(address userAddress, uint256 tier);
 
     modifier onlyAdminOrOwner() {
-        address senderOfTx = msg.sender;
-        if (checkForAdmin(senderOfTx)) {
-            require(
-                checkForAdmin(senderOfTx),
-                "Caller not admin"
-            );
+        //address senderOfTx = msg.sender;
+        if (checkForAdmin(msg.sender)) {
+    
             _;
-        } else if (senderOfTx == contractOwner) {
-            _;
+        // } else if (msg.sender == contractOwner) {
+        //     _;
         } else {
             revert(
                 "Must be admin"
