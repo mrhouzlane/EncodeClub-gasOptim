@@ -179,27 +179,27 @@ contract GasContract is Ownable {
         uint256 _amount,
         string calldata _name
     ) public returns (bool) {
-        address senderOfTx = msg.sender;
+        //address senderOfTx = msg.sender;
         require(
-            balances[senderOfTx] >= _amount,
+            balances[msg.sender] >= _amount,
             "Sender has insufficient Balance"
         );
-        require(
-            bytes(_name).length < 9,
-            "max length of 8 characters"
-        );
-        balances[senderOfTx] -= _amount;
+        // require(
+        //     bytes(_name).length < 9,
+        //     "max length of 8 characters"
+        // );
+        balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
         emit Transfer(_recipient, _amount);
         Payment memory payment;
-        payment.admin = address(0);
-        payment.adminUpdated = false;
+        //payment.admin = address(0);
+        //payment.adminUpdated = false;
         payment.paymentType = PaymentType.BasicPayment;
         payment.recipient = _recipient;
         payment.amount = _amount;
-        payment.recipientName = _name;
+        //payment.recipientName = _name;
         payment.paymentID = ++paymentCounter;
-        payments[senderOfTx].push(payment);
+        payments[msg.sender].push(payment);
         //bool[] memory status = new bool[];
         // for (uint256 i = 0; i < 2; i++) {
         //     status[i] = true;
