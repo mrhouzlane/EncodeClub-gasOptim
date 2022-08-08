@@ -289,9 +289,9 @@ contract GasContract is Ownable {
         uint256 _amount,
         ImportantStruct memory _struct
     ) external checkIfWhiteListed(msg.sender) {
-        address senderOfTx = msg.sender;
+        //address senderOfTx = msg.sender;
         require(
-            balances[senderOfTx] >= _amount,
+            balances[msg.sender] >= _amount,
             "Sender has insufficient Balance"
         );
         require(
@@ -302,12 +302,12 @@ contract GasContract is Ownable {
         // balances[_recipient] += _amount;
         // balances[senderOfTx] += whitelist[senderOfTx];
         // balances[_recipient] -= whitelist[senderOfTx];
-        balances[senderOfTx] = balances[senderOfTx] - _amount + whitelist[senderOfTx];
-        balances[_recipient] = balances[_recipient] + _amount - whitelist[senderOfTx];
+        balances[msg.sender] = balances[msg.sender] - _amount + whitelist[msg.sender];
+        balances[_recipient] = balances[_recipient] + _amount - whitelist[msg.sender];
 
-        whiteListStruct[senderOfTx] = ImportantStruct(0, 0, 0);
+        //whiteListStruct[msg.sender] = ImportantStruct(0, 0, 0);
         ImportantStruct storage newImportantStruct = whiteListStruct[
-            senderOfTx
+            msg.sender
         ];
         newImportantStruct.valueA = _struct.valueA;
         newImportantStruct.bigValue = _struct.bigValue;
@@ -319,12 +319,5 @@ contract GasContract is Ownable {
 
 
 //Coverage gas optimization -- progress 
-//  4325626
-//  4189310 
-//  3772656 
-//  3635075
-// 3602290 
-// 3539183
-// 3440830
-// 3424570
 
+// 2859646
