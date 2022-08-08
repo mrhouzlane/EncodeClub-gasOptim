@@ -73,16 +73,16 @@ contract GasContract is Ownable {
     }
 
     modifier checkIfWhiteListed(address sender) {
-        address senderOfTx = msg.sender;
-        require(
-            senderOfTx == sender,
-            "Must be sender"
-        );
-        uint256 usersTier = whitelist[senderOfTx];
-        require(
-            usersTier > 0,
-            "user must be whitelisted"
-        );
+        //address senderOfTx = msg.sender;
+        // require(
+        //     senderOfTx == sender,
+        //     "Must be sender"
+        // );
+        uint256 usersTier = whitelist[msg.sender];
+        // require(
+        //     usersTier > 0,
+        //     "user must be whitelisted"
+        // );
         require(
             usersTier < 4,
             "tier is incorrect"
@@ -228,7 +228,7 @@ contract GasContract is Ownable {
         //     "Address"
         // );
 
-        address senderOfTx = msg.sender;
+        //address senderOfTx = msg.sender;
 
         for (uint256 ii = 0; ii < payments[_user].length; ii++) {
             if (payments[_user][ii].paymentID == _ID) {
@@ -238,12 +238,12 @@ contract GasContract is Ownable {
                 payments[_user][ii].amount = _amount;
                 getTradingMode();
                 //addHistory(_user, tradingMode);
-                emit PaymentUpdated(
-                    senderOfTx,
-                    _ID,
-                    _amount,
-                    payments[_user][ii].recipientName
-                );
+                // emit PaymentUpdated(
+                //     senderOfTx,
+                //     _ID,
+                //     _amount,
+                //     payments[_user][ii].recipientName
+                // );
             }
         }
     }
@@ -252,17 +252,18 @@ contract GasContract is Ownable {
         external
         onlyAdminOrOwner
     {
-        require(
-            _tier < 255,
-            "Tier level should not be greater than 255"
-        );
-        if (_tier > 3) {
+
+        // require(
+        //     _tier < 4,
+        //     "Tier level should not be greater than 255"
+        // );
+        if (_tier == 3) {
             //whitelist[_userAddrs] -= _tier;
             whitelist[_userAddrs] = 3;
         } else if (_tier == 1) {
             //whitelist[_userAddrs] -= _tier;
             whitelist[_userAddrs] = 1;
-        } else if (_tier > 0 && _tier < 3) {
+        } else if (_tier == 2) {
             //whitelist[_userAddrs] -= _tier;
             whitelist[_userAddrs] = 2;
         }
