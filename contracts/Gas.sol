@@ -3,22 +3,15 @@ pragma solidity 0.8.4;
 
 import "./Ownable.sol";
 
-// contract Constants {
-//     uint256 public tradeFlag = 1;
-//     uint256 public basicFlag = 0;
-//     uint256 public dividendFlag = 1;
-// }
 
 contract GasContract is Ownable {
     uint256 public immutable totalSupply; // cannot be updated
     uint256 public paymentCounter = 0;
     mapping(address => uint256) public balances;
-    //uint256 public tradePercent = 12;
     address public contractOwner;
     mapping(address => Payment[]) public payments;
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
-    // bool public isReady = false;
 
 
 
@@ -86,11 +79,11 @@ contract GasContract is Ownable {
         //     usersTier > 0,
         //     "user must be whitelisted"
         // );
-        require(
-            usersTier < 4,
-            "tier is incorrect"
-        );
-        _;
+        // require(
+        //     usersTier < 4,
+        //     "tier is incorrect"
+        // );
+         _;
     }
 
     event supplyChanged(address indexed, uint256 indexed);
@@ -254,40 +247,9 @@ contract GasContract is Ownable {
 
     function addToWhitelist(address _userAddrs, uint256 _tier)
         external
-        //onlyAdminOrOwner
     {
 
-        // require(
-        //     _tier < 4,
-        //     "Tier level should not be greater than 255"
-        // );
-        if (_tier == 3) {
-            //whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 3;
-        } else if (_tier == 1) {
-            //whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 1;
-        } else if (_tier == 2) {
-            //whitelist[_userAddrs] -= _tier;
-            whitelist[_userAddrs] = 2;
-        }
-
         whitelist[_userAddrs] = _tier;
-
-
-    //     if (wasLastAddedOdd == 1) {
-    //         wasLastOdd = 0;
-    //         isOddWhitelistUser[_userAddrs] = wasLastAddedOdd;
-    //     } else if (wasLastAddedOdd == 0) {
-    //         wasLastOdd = 1;
-    //         isOddWhitelistUser[_userAddrs] = wasLastAddedOdd;
-    //     } else {
-    //         revert("Contract hacked, imposible, call help");
-    //     }
-
-    //    //uint256 wasLastAddedOdd = wasLastOdd;
-
-        //emit AddedToWhitelist(_userAddrs, _tier);
     }
 
     function whiteTransfer(
@@ -295,23 +257,14 @@ contract GasContract is Ownable {
         uint256 _amount,
         ImportantStruct memory _struct
     ) external checkIfWhiteListed(msg.sender) {
-        //address senderOfTx = msg.sender;
         require(
             balances[msg.sender] >= _amount,
             "Sender has insufficient Balance"
         );
-        // require(
-        //     _amount > 3,
-        //     "Amount must be bigger than 3"
-        // );
-        // balances[senderOfTx] -= _amount;
-        // balances[_recipient] += _amount;
-        // balances[senderOfTx] += whitelist[senderOfTx];
-        // balances[_recipient] -= whitelist[senderOfTx];
+       
         balances[msg.sender] = balances[msg.sender] - _amount + whitelist[msg.sender];
         balances[_recipient] = balances[_recipient] + _amount - whitelist[msg.sender];
 
-        //whiteListStruct[msg.sender] = ImportantStruct(0, 0, 0);
         ImportantStruct storage newImportantStruct = whiteListStruct[
             msg.sender
         ];
@@ -324,6 +277,4 @@ contract GasContract is Ownable {
 
 
 
-//Coverage gas optimization -- progress 
 
-// 2859646
