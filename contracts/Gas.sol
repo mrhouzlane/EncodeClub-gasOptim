@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.0;
+pragma solidity 0.8.4;
 
 import "./Ownable.sol";
 
@@ -171,10 +171,10 @@ contract GasContract is Ownable {
         view
         returns (Payment[] memory payments_)
     {
-        require(
-            _user != address(0),
-            "User must have a valid non zero address"
-        );
+        // require(
+        //     _user != address(0),
+        //     "User must have a valid non zero address"
+        // );
         return payments[_user];
     }
 
