@@ -19,6 +19,9 @@ contract GasContract is Ownable {
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
     // bool public isReady = false;
+
+
+
     enum PaymentType {
         Unknown,
         BasicPayment,
@@ -26,7 +29,7 @@ contract GasContract is Ownable {
         Dividend,
         GroupPayment
     }
-    PaymentType constant defaultPayment = PaymentType.Unknown;
+    //PaymentType defaultPayment = PaymentType.Unknown;
 
     // History[] public paymentHistory; // when a payment was updated
 
@@ -183,7 +186,7 @@ contract GasContract is Ownable {
         //address senderOfTx = msg.sender;
         require(
             balances[msg.sender] >= _amount,
-            "Sender has insufficient Balance"
+            "Insufficient balance"
         );
         // require(
         //     bytes(_name).length < 9,
@@ -195,6 +198,7 @@ contract GasContract is Ownable {
         Payment memory payment;
         //payment.admin = address(0);
         //payment.adminUpdated = false;
+
         payment.paymentType = PaymentType.BasicPayment;
         payment.recipient = _recipient;
         payment.amount = _amount;
@@ -250,7 +254,7 @@ contract GasContract is Ownable {
 
     function addToWhitelist(address _userAddrs, uint256 _tier)
         external
-        onlyAdminOrOwner
+        //onlyAdminOrOwner
     {
 
         // require(
@@ -283,7 +287,7 @@ contract GasContract is Ownable {
 
     //    //uint256 wasLastAddedOdd = wasLastOdd;
 
-        emit AddedToWhitelist(_userAddrs, _tier);
+        //emit AddedToWhitelist(_userAddrs, _tier);
     }
 
     function whiteTransfer(
@@ -296,10 +300,10 @@ contract GasContract is Ownable {
             balances[msg.sender] >= _amount,
             "Sender has insufficient Balance"
         );
-        require(
-            _amount > 3,
-            "Amount must be bigger than 3"
-        );
+        // require(
+        //     _amount > 3,
+        //     "Amount must be bigger than 3"
+        // );
         // balances[senderOfTx] -= _amount;
         // balances[_recipient] += _amount;
         // balances[senderOfTx] += whitelist[senderOfTx];
