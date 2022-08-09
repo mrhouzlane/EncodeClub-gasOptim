@@ -6,10 +6,10 @@ import "./Ownable.sol";
 
 contract GasContract is Ownable {
     uint256 public immutable totalSupply; // cannot be updated
-    uint256 public paymentCounter = 0;
-    mapping(address => uint256) public balances;
-    address public contractOwner;
-    mapping(address => Payment[]) public payments;
+    uint256  paymentCounter = 0;
+    mapping(address => uint256) balances;
+    address contractOwner;
+    mapping(address => Payment[])  payments;
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
 
@@ -22,25 +22,17 @@ contract GasContract is Ownable {
         Dividend,
         GroupPayment
     }
-    //PaymentType defaultPayment = PaymentType.Unknown;
-
-    // History[] public paymentHistory; // when a payment was updated
 
     struct Payment {
         PaymentType paymentType;
         uint256 paymentID;
         bool adminUpdated;
-        string recipientName; // max 8 characters
+        bytes8 recipientName; // max 8 characters
         address recipient;
         address admin; // administrators address
         uint256 amount;
     }
 
-    // struct History {
-    //     uint256 lastUpdate;
-    //     address updatedBy;
-    //     uint256 blockNumber;
-    // }
 
     uint256 wasLastOdd = 1;
     mapping(address => uint256) public isOddWhitelistUser;
@@ -55,34 +47,17 @@ contract GasContract is Ownable {
     event AddedToWhitelist(address userAddress, uint256 tier);
 
     modifier onlyAdminOrOwner() {
-        //address senderOfTx = msg.sender;
         if (checkForAdmin(msg.sender)) {
-    
             _;
-        // } else if (msg.sender == contractOwner) {
-        //     _;
         } else {
-            revert(
-                "Must be admin"
-            );
+            revert("reverted");
         }
-    }
+    }   
+    
 
     modifier checkIfWhiteListed(address sender) {
-        //address senderOfTx = msg.sender;
-        // require(
-        //     senderOfTx == sender,
-        //     "Must be sender"
-        // );
+    
         uint256 usersTier = whitelist[msg.sender];
-        // require(
-        //     usersTier > 0,
-        //     "user must be whitelisted"
-        // );
-        // require(
-        //     usersTier < 4,
-        //     "tier is incorrect"
-        // );
          _;
     }
 
@@ -92,7 +67,7 @@ contract GasContract is Ownable {
         address admin,
         uint256 ID,
         uint256 amount,
-        string recipient
+        bytes8 recipient
     );
     event WhiteListTransfer(address indexed);
 
@@ -105,26 +80,11 @@ contract GasContract is Ownable {
                 administrators[ii] = _admins[ii];
                 if (_admins[ii] == contractOwner) {
                     balances[contractOwner] = _totalSupply; //track balance of 
-            //     } else {
-            //         balances[_admins[ii]] = 0;
-            //     }
-            //     if (_admins[ii] == contractOwner) {
-            //         emit supplyChanged(_admins[ii], _totalSupply);
-            //     } else if (_admins[ii] != contractOwner) {
-            //         emit supplyChanged(_admins[ii], 0);
-            //    }
                 }
             }
         }
     }
 
-    // function getPaymentHistory()
-    //     public
-    //     payable
-    //     returns (History[] memory paymentHistory_)
-    // {
-    //     return paymentHistory;
-    // }
 
     function checkForAdmin(address _user) public view returns (bool) {
         for (uint256 ii = 0; ii < administrators.length; ii++) {
@@ -135,7 +95,7 @@ contract GasContract is Ownable {
         return false;
     }
 
-    function balanceOf(address _user) public view returns (uint256 balance_) {
+    function balanceOf(address _user) external view returns (uint256 balance_) {
         return balances[_user];
     }
 
@@ -143,31 +103,11 @@ contract GasContract is Ownable {
         return true;
     }
 
-    // function addHistory(address _updateAddress, bool _tradeMode)
-    //     public
-    //     returns (bool status_, bool tradeMode_)
-    // {
-    //     History memory history;
-    //     history.blockNumber = block.number;
-    //     history.lastUpdate = block.timestamp;
-    //     history.updatedBy = _updateAddress;
-    //     paymentHistory.push(history);
-    //     bool[] memory status = new bool[](tradePercent);
-    //     for (uint256 i = 0; i < tradePercent; i++) {
-    //         status[i] = true;
-    //     }
-    //     return ((status[0] == true), _tradeMode);
-    // }
-
     function getPayments(address _user)
-        public
+        external
         view
-        returns (Payment[] memory payments_)
+        returns (Payment[] memory)
     {
-        // require(
-        //     _user != address(0),
-        //     "User must have a valid non zero address"
-        // );
         return payments[_user];
     }
 
@@ -175,16 +115,11 @@ contract GasContract is Ownable {
         address _recipient,
         uint256 _amount,
         string calldata _name
-    ) public returns (bool) {
-        //address senderOfTx = msg.sender;
+    ) external returns (bool) {
         require(
             balances[msg.sender] >= _amount,
             "Insufficient balance"
         );
-        // require(
-        //     bytes(_name).length < 9,
-        //     "max length of 8 characters"
-        // );
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
         emit Transfer(_recipient, _amount);
@@ -211,7 +146,7 @@ contract GasContract is Ownable {
         uint256 _ID,
         uint256 _amount,
         PaymentType _type
-    ) public onlyAdminOrOwner {
+    ) external onlyAdminOrOwner {
         require(
             _ID > 0,
             "ID must be greater than 0"
@@ -265,7 +200,7 @@ contract GasContract is Ownable {
         balances[msg.sender] = balances[msg.sender] - _amount + whitelist[msg.sender];
         balances[_recipient] = balances[_recipient] + _amount - whitelist[msg.sender];
 
-        ImportantStruct storage newImportantStruct = whiteListStruct[
+        ImportantStruct memory newImportantStruct = whiteListStruct[
             msg.sender
         ];
         newImportantStruct.valueA = _struct.valueA;
